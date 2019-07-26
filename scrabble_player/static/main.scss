@@ -1,0 +1,97 @@
+.content {
+    margin-top: 100px;
+}
+
+.buttons {
+    margin-top: 30px;
+}
+
+.board {
+    font-size: 0;
+    padding: 1px;
+
+    .board-tile {
+        display: inline-block;
+
+        font-size: 14px;
+
+        line-height: 35px;
+        height: 35px;
+        width: 35px;
+        margin: 1px;
+        border: 1px solid transparent;
+
+        text-align: center;
+
+        &:not(.input-open)::after {
+            display: inline-block;
+            zoom: 1;
+            height: 1em;
+            font-size: 1em;
+            content: '';
+        }
+
+        input {
+            display: none;
+            text-align: center;
+            height: 35px;
+            width: 35px;
+        }
+
+        &.input-open input{
+            display: inline-block;
+        }
+    }
+
+    .board-tile[data-letter]:not(.input-open) {
+        background-color: rgb(243, 204, 139);
+        font-weight: bold;
+        border: 1px solid black;
+
+        &::after {
+            content: attr(data-letter);
+            text-transform: uppercase;
+        }
+    }
+
+    :not([data-letter]):not(.input-open) {
+        &.board-tile-nothing {
+            background-color: rgb(206, 197, 168);
+        }
+
+        &.board-tile-tripple-word {
+            background-color: rgb(255, 109, 83);
+            &::after {
+                content: 'TW';
+            }
+        }
+
+        &.board-tile-double-letter {
+            background-color: rgb(192, 218, 217);
+            &::after {
+                content: 'DL';
+            }
+        }
+
+        &.board-tile-double-word {
+            background-color: rgb(255, 199, 186);
+            &::after {
+                content: 'DW';
+            }
+        }
+
+        &.board-tile-tripple-letter {
+            background-color: rgb(0, 149, 170);
+            &::after {
+                content: 'TL';
+            }
+        }
+
+        &.board-tile-center {
+            background-color: rgb(255, 199, 186);
+            &::after {
+                content: '\2605';
+            }
+        }
+    }
+}

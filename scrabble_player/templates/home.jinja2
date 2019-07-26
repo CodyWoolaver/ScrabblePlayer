@@ -1,0 +1,46 @@
+{% extends "layout.jinja2" %}
+
+{% block assets %}
+    {% webpack 'main', '.js' -%}
+        <script type="text/javascript" src="{{ ASSET.url }}" async defer></script>
+    {% endwebpack %}
+
+    {% webpack 'main', '.css' -%}
+        <link rel="stylesheet" type="text/css" href="{{ ASSET.url }}">
+    {% endwebpack %}
+
+{% endblock %}
+
+{% set tile_class_mapping = {
+    '-': 'board-tile-nothing',
+    '1': 'board-tile-tripple-word',
+    '2': 'board-tile-double-letter',
+    '3': 'board-tile-double-word',
+    '4': 'board-tile-tripple-letter',
+    '5': 'board-tile-center',
+} %}
+
+{% block content %}
+<input type="hidden" value="{{ board_rows }}" id="board-rows" />
+<input type="hidden" value="{{ board_cols }}" id="board-cols" />
+<div class="content">
+    <center>
+        <div class="board">
+            {% for y in range(board_rows) %}
+                {% for x in range(board_cols) %}
+                    <span data-x="{{ x }}" data-y="{{ y }}" class="board-tile {{ tile_class_mapping[board[y * board_cols + x]] }}">
+                        <input maxlength="1" type="text">
+                    </span>
+                {% endfor %}
+                <br />
+            {% endfor %}
+        </div>
+
+        <div class="rack"></div>
+
+        <div class="buttons">
+          <button id="submit" type="button" class="btn btn-secondary">Submit</button>
+        </div>
+    </center>
+</div>
+{% endblock content %}
