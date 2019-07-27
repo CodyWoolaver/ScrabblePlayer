@@ -2,6 +2,64 @@
     margin-top: 100px;
 }
 
+.rack {
+    margin-top: 30px;
+    background-color: #7c6f59;
+    height: 55px;
+    width: 500px;
+    font-size: 0px;
+
+    .rack-tile {
+        display: inline-block;
+
+        font-size: 14px;
+
+        line-height: 35px;
+        height: 35px;
+        width: 35px;
+        margin: 10px 2px;
+        border: 1px solid transparent;
+
+        text-align: center;
+
+        &:not(.input-visible)::after {
+            display: inline-block;
+            zoom: 1;
+            height: 1em;
+            font-size: 1em;
+            content: '';
+        }
+
+        &:not([data-letter]):not(.input-visible) {
+            background-color: rgb(206, 197, 168);
+        }
+
+        input {
+            display: none;
+            text-align: center;
+            height: 35px;
+            width: 35px;
+        }
+
+        &.input-visible input {
+            display: inline-block;
+        }
+    }
+
+    .rack-tile[data-letter]:not(.input-visible) {
+        background-color: rgb(243, 204, 139);
+        font-weight: bold;
+        border: 1px solid black;
+
+        &::after {
+            content: attr(data-letter);
+            text-transform: uppercase;
+        }
+    }
+
+    
+}
+
 .buttons {
     margin-top: 30px;
 }
@@ -38,7 +96,7 @@
             width: 35px;
         }
 
-        &.input-open input{
+        &.input-open input {
             display: inline-block;
         }
     }

@@ -29,14 +29,18 @@
             {% for y in range(board_rows) %}
                 {% for x in range(board_cols) %}
                     <span data-x="{{ x }}" data-y="{{ y }}" class="board-tile {{ tile_class_mapping[board[y * board_cols + x]] }}">
-                        <input maxlength="1" type="text">
+                        <input maxlength="1" type="text"/ >
                     </span>
                 {% endfor %}
                 <br />
             {% endfor %}
         </div>
 
-        <div class="rack"></div>
+        <div class="rack">
+            <span class="rack-tile">
+                <input maxlength="1" type="text" />
+            </span>
+        </div>
 
         <div class="buttons">
           <button id="submit" type="button" class="btn btn-secondary">Submit</button>
