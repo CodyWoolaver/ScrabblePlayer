@@ -1,5 +1,7 @@
 from pyramid.view import view_config
 
+from scrabble_player.utils.scrabble import Board, Rack
+
 BOARD_ROWS = 15
 BOARD_COLS = 15
 BOARD_CONFIGURATION = (  # Scrabble
@@ -52,3 +54,19 @@ def home(request):
         'board_rows': BOARD_ROWS,
         'board_cols': BOARD_COLS,
     }
+
+
+@view_config(route_name='process', renderer='json')
+def process(request):
+    board = request.json['board']
+    rack = request.json['rack']
+
+    rack = Rack(rack)
+
+    standard_board = Board(board)
+    rotated_board = Board(zip(*[row for row in board]))
+
+    print(standard_board)
+    print(rotated_board)
+
+    return {}

@@ -1,53 +1,73 @@
 import "./main.scss";
 const $ = require("jquery");
 
+
+
 $(document).ready(function() {
-    var AUTO_MOVE = false,
-        AUTO_MOVE_DIRECTION = null;
+    var LAST_DIRECTION = "selected-right";
 
     $(".board").on("click", ".board-tile", function(e) {
         var $el = $(e.target);
-        $(".board .board-tile.input-open").removeClass("input-open");
-        $el.addClass("input-open");
+        $(".board .board-tile.selected").removeClass("selected");
+        $el.addClass("selected");
         $el.find("input").focus();
     });
 
     $(".board").on("focus", ".board-tile > input", function(e) {
-        e.target.setSelectionRange(0, 1)
+        var $el = $(e.target),
+            $parent = $el.parent();
+        $parent.addClass("selected").addClass(LAST_DIRECTION);
+        e.target.setSelectionRange(0, 1);
     });
 
     $(".rack").on("focus", ".rack-tile > input", function(e) {
         e.target.setSelectionRange(0, 1)
     });
 
-    $(".board").on("keyup focusout", ".board-tile > input", function(e) {
+    $(".board").on("focusout", ".board-tile > input", function(e) {
+        var $el = $(e.target),
+            $parent = $el.parent();
+
+        $parent.removeClass("selected selected-down selected-right");
+    });
+
+    $(".board").on("keyup", ".board-tile > input", function(e) {
         var keyCode = e.code,
             $el = $(e.target),
             $parent = $el.parent(),
             x = $parent.data("x"),
             y = $parent.data("y"),
-            value = $el.val(),
+            value = $el.val().toUpperCase(),
             $nextTile;
 
-        if (value && !(/^[a-z_ ]/gi.test(value))) {
+        if (!(/^[a-z_ ]/gi.test(e.key))) {
             console.log("invalid entry: ", value);
             $el.val("");
             return;
+        } else if (value === "_") {
+            value = " ";
         }
+        $el.val(value);
 
-        if (keyCode === "ArrowDown") {
-            $nextTile = $(`.board .board-tile[data-x=${x}][data-y=${y + 1}]`);
+        if (keyCode === "ArrowDown" && $parent.hasClass("selected-right")) {
+            $parent.removeClass("selected-right").addClass("selected-down");
+            LAST_DIRECTION = "selected-down";
+            return;
+        } else if (keyCode === "ArrowRight" && $parent.hasClass("selected-down")) {
+            $parent.removeClass("selected-down").addClass("selected-right");
+            LAST_DIRECTION = "selected-right";
+            return;
         } else if (keyCode === "ArrowUp") {
             $nextTile = $(`.board .board-tile[data-x=${x}][data-y=${y - 1}]`);
-        } else if (keyCode === "ArrowRight") {
-            $nextTile = $(`.board .board-tile[data-x=${x + 1}][data-y=${y}]`);
-        } else if (keyCode === "ArrowLeft") {
+        } else if (keyCode === "ArrowLeft" || keyCode === "Backspace") {
             $nextTile = $(`.board .board-tile[data-x=${x - 1}][data-y=${y}]`);
-        } else if (e.type === "keyup") {
-            return;
+        } else if (keyCode === "ArrowRight" || $parent.hasClass("selected-right")) {
+            $nextTile = $(`.board .board-tile[data-x=${x + 1}][data-y=${y}]`);
+        } else if (keyCode === "ArrowDown" || $parent.hasClass("selected-down")) {
+            $nextTile = $(`.board .board-tile[data-x=${x}][data-y=${y + 1}]`);
         }
 
-        $parent.removeClass("input-open")
+        $parent.removeClass("selected selected-down selected-right")
         if (!!value) {
             $parent.attr("data-letter", value);
         } else {
@@ -55,7 +75,8 @@ $(document).ready(function() {
         }
 
         if ($nextTile) {
-            $nextTile.addClass("input-open");
+            $parent.removeClass("selected selected-right selected-down")
+            $nextTile.addClass("selected").addClass(LAST_DIRECTION);
             $nextTile.find("input").focus();
         }
     });
@@ -154,7 +175,7 @@ $(document).ready(function() {
             var $el = $(this),
                 x = $el.data('x'),
                 y = $el.data('y'),
-                char = $el.data('letter');
+                char = $el.attr('data-letter');
 
             if (!char) {
                 char = "";
@@ -167,7 +188,7 @@ $(document).ready(function() {
 
         $(".rack .rack-tile").each(function() {
             var $el = $(this),
-                char = $el.data('letter');
+                char = $el.attr('data-letter');
 
             if (!char) {
                 return;
@@ -178,7 +199,26 @@ $(document).ready(function() {
             rack.push(char);
         });
 
+        $.ajax({
+            contentType: 'application/json',
+            data: JSON.stringify({board, rack}),
+            dataType: 'json',
+            timeout: 0,
+            type: 'POST',
+            url: '/process/'
+        }).done(function() {
+            console.log("ajax request: success");
+        })
+        .fail(function() {
+            console.log("ajax request: error");
+        })
+        .always(function() {
+            console.log("ajax request: complete");
+        });
         console.log(board);
         console.log(rack);
     });
 });
+
+// Used to initialize data so we don't need to type it out every time
+import "./test_data";
