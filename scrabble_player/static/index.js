@@ -1,7 +1,7 @@
 import "./main.scss";
+
 const $ = require("jquery");
-
-
+const _ = require("underscore");
 
 $(document).ready(function() {
     var LAST_DIRECTION = "selected-right";
@@ -20,10 +20,6 @@ $(document).ready(function() {
         e.target.setSelectionRange(0, 1);
     });
 
-    $(".rack").on("focus", ".rack-tile > input", function(e) {
-        e.target.setSelectionRange(0, 1)
-    });
-
     $(".board").on("focusout", ".board-tile > input", function(e) {
         var $el = $(e.target),
             $parent = $el.parent();
@@ -32,46 +28,60 @@ $(document).ready(function() {
     });
 
     $(".board").on("keyup", ".board-tile > input", function(e) {
-        var keyCode = e.code,
+        var code = e.code,
+            keyCode = e.keyCode,
             $el = $(e.target),
             $parent = $el.parent(),
             x = $parent.data("x"),
             y = $parent.data("y"),
-            value = $el.val().toUpperCase(),
+            isLetter = keyCode >= 65 && keyCode <= 91,
+            isRemoval = keyCode === 8 || keyCode === 46,  // Backspace + Delete
+            value = $el.val(),
             $nextTile;
 
-        if (!(/^[a-z_ ]/gi.test(e.key))) {
-            console.log("invalid entry: ", value);
+        if (isLetter) { // A-Z
+            value = e.key.toUpperCase();
+            $el.val(value);
+            $(".board .board-tile.suggestion").removeAttr("data-letter").removeClass("suggestion");
+        }
+
+        if (
+            !isLetter && // A-Z
+            (keyCode < 37 || keyCode > 40) && // Arrow Keys
+            (keyCode != 32) && // SpaceBar
+            !isRemoval // Backspace + Delete
+        ) {
             $el.val("");
             return;
-        } else if (value === "_") {
-            value = " ";
         }
-        $el.val(value);
 
-        if (keyCode === "ArrowDown" && $parent.hasClass("selected-right")) {
+        if (code === "ArrowDown" && $parent.hasClass("selected-right")) {
             $parent.removeClass("selected-right").addClass("selected-down");
             LAST_DIRECTION = "selected-down";
             return;
-        } else if (keyCode === "ArrowRight" && $parent.hasClass("selected-down")) {
+        } else if (code === "ArrowRight" && $parent.hasClass("selected-down")) {
             $parent.removeClass("selected-down").addClass("selected-right");
             LAST_DIRECTION = "selected-right";
             return;
-        } else if (keyCode === "ArrowUp") {
+        } else if (code === "ArrowUp") {
             $nextTile = $(`.board .board-tile[data-x=${x}][data-y=${y - 1}]`);
-        } else if (keyCode === "ArrowLeft" || keyCode === "Backspace") {
+        } else if (code === "ArrowLeft" || code === "Backspace") {
             $nextTile = $(`.board .board-tile[data-x=${x - 1}][data-y=${y}]`);
-        } else if (keyCode === "ArrowRight" || $parent.hasClass("selected-right")) {
+        } else if (code === "ArrowRight" || $parent.hasClass("selected-right")) {
             $nextTile = $(`.board .board-tile[data-x=${x + 1}][data-y=${y}]`);
-        } else if (keyCode === "ArrowDown" || $parent.hasClass("selected-down")) {
+        } else if (code === "ArrowDown" || $parent.hasClass("selected-down")) {
             $nextTile = $(`.board .board-tile[data-x=${x}][data-y=${y + 1}]`);
         }
 
         $parent.removeClass("selected selected-down selected-right")
-        if (!!value) {
+
+        if (isLetter && !!value) {
             $parent.attr("data-letter", value);
-        } else {
+        } else if (isRemoval) {
             $parent.removeAttr("data-letter");
+            if ($parent.hasClass("suggestion")) {
+                $(".board .board-tile.suggestion").removeAttr("data-letter").removeClass("suggestion");
+            }
         }
 
         if ($nextTile) {
@@ -81,91 +91,113 @@ $(document).ready(function() {
         }
     });
 
-
     $(".rack").on("click", function(e) {
-        var $nextTile = $(".rack-tile:last-child:not([data-letter])");
+        var $nextTile = $(".rack-tile:not([data-letter])").eq(0);
+
+        $(".rack .rack-tile.input-visible").removeClass("input-visible");
         $(".board .board-tile.input-visible").removeClass("input-visible");
-        if ($nextTile.length === 0 && $(".rack .rack-tile").length < 12) {
-            $nextTile = $("<span>", {'class': 'rack-tile'}).html($("<input>", {"maxlength": 1, "type": "text"}));
-            $nextTile.appendTo(".rack")
-        }
-        $nextTile.addClass('input-visible').find("input").focus();
+
+        $nextTile.addClass("input-visible").find("input").focus();
     });
 
     $(".rack").on("click", ".rack-tile", function(e) {
         var $el = $(e.target);
+
         $(".rack .rack-tile.input-visible").removeClass("input-visible");
+        $(".board .board-tile.input-visible").removeClass("input-visible");
+
         $el.addClass("input-visible").find("input").focus();
         e.stopPropagation();
     });
 
-    $(".rack").on("keyup focusout", ".rack-tile > input", function(e) {
-        var keyCode = e.code,
+    $(".rack").on("focus", ".rack-tile > input", function(e) {
+        e.target.setSelectionRange(0, 1)
+    });
+
+
+    $(".rack").on("focusout", ".rack-tile > input", function(e) {
+        var $el = $(e.target),
+            $parent = $el.parent();
+
+        $parent.removeClass("input-visible");
+    });
+
+    $(".rack").on("keyup", ".rack-tile > input", function(e) {
+        var code = e.code,
+            keyCode = e.keyCode,
             $el = $(e.target),
             $parent = $el.parent(),
+            i = $parent.data("i"),
+            isLetter = keyCode >= 65 && keyCode <= 91,
+            isRemoval = keyCode === 8 || keyCode === 46,  // Backspace + Delete
             value = $el.val(),
             $nextTile;
 
-        if (value && !(/^[a-z_ ]/gi.test(value))) {
-            console.log("invalid entry: ", value);
+        if (isLetter) { // A-Z
+            value = e.key.toUpperCase();
+            $el.val(value);
+            $(".board .board-tile.suggestion").removeAttr("data-letter").removeClass("suggestion");
+        }
+
+        if (
+            !isLetter && // A-Z
+            (keyCode < 37 || keyCode > 40) && // Arrow Keys
+            (keyCode != 32) && // SpaceBar
+            !isRemoval // Backspace + Delete
+        ) {
             $el.val("");
             return;
         }
 
-        if (keyCode === "ArrowLeft") {
+        if (code === "ArrowUp" || code === "ArrowDown") {
+            return;
+        } else if (code === "ArrowLeft") {
             $nextTile = $parent.prev();
-        } else if (keyCode === "ArrowRight") {
+        } else if (code === "ArrowRight") {
             $nextTile = $parent.next();
-        } else if (keyCode === "ArrowDown" || keyCode === "ArrowUp") {
-            return;
-        } else if (keyCode === "Backspace") {
-            if ($(".rack .rack-tile").length === 1) {
-                return;
+        } else if (code === "Delete") {
+            $nextTile = $(`.rack .rack-tile[data-i=${i}]`);
+        } else if (code === "Backspace") {
+            if (i === 0) {
+                $nextTile = $(".rack .rack-tile[data-i=0]");
+            } else {
+                $nextTile = $(`.rack .rack-tile[data-i=${i - 1}]`);
             }
-
-            $nextTile = $parent.prev();
-            if ($nextTile.length === 0) {
-                $nextTile = $parent.next();
-            }
-
-            $parent.remove();
-            $nextTile.addClass("input-visible");
-            $nextTile.find("input").focus();
-            return;
+        } else {
+            $nextTile = $(`.rack .rack-tile[data-i=${i + 1}]`);
         }
 
         $parent.removeClass("input-visible")
-        if (!!value) {
+        if (isLetter && !!value) {
             $parent.attr("data-letter", value);
-        } else {
+        } else if (isRemoval) {
             $parent.removeAttr("data-letter");
-        }
-
-        if (e.type === "focusout") {
-            if ($(".rack .rack-tile").length === 1) {
-                return;
-            }
-
-            if (!e.originalEvent.relatedTarget) {
-                $parent.remove();
-            }
-            return;
-        }
-
-        if (!$nextTile && $(".rack .rack-tile").length < 12) {
-            $nextTile = $("<span>", {'class': 'rack-tile'}).html($("<input>", {"maxlength": 1, "type": "text"}));
-            $nextTile.appendTo(".rack");
-        } else if ((keyCode === "ArrowLeft" || keyCode === "ArrowRight") && value === '') {
-            $parent.remove();
         }
 
         $nextTile.addClass("input-visible");
         $nextTile.find("input").focus();
+
+        $(".rack .rack-tile").each(function(){
+            var $el = $(this),
+                $nextTile = $el;
+
+            if (!$el.attr("data-letter")) {
+                while (($nextTile = $nextTile.next()).length !== 0) {
+                    var attr = $nextTile.attr('data-letter');
+
+                    if (attr) {
+                        $el.attr('data-letter', attr).find("input").val(attr);
+                        $nextTile.removeAttr('data-letter').find('input').val("");
+                        break;
+                    }
+                }
+            }
+        })
     });
 
-    $("#submit").on('click', function(e) {
-        var rows = parseInt($('#board-rows').val(), 10),
-            cols = parseInt($('#board-cols').val(), 10),
+    $("#submit").on("click", function(e) {
+        var rows = parseInt($("#board-rows").val(), 10),
+            cols = parseInt($("#board-cols").val(), 10),
             board = new Array(rows).fill(null).map(function () {
                 return new Array(cols).fill(null);
             }),
@@ -173,9 +205,9 @@ $(document).ready(function() {
 
         $(".board .board-tile").each(function() {
             var $el = $(this),
-                x = $el.data('x'),
-                y = $el.data('y'),
-                char = $el.attr('data-letter');
+                x = $el.data("x"),
+                y = $el.data("y"),
+                char = $el.attr("data-letter");
 
             if (!char) {
                 char = "";
@@ -188,11 +220,11 @@ $(document).ready(function() {
 
         $(".rack .rack-tile").each(function() {
             var $el = $(this),
-                char = $el.attr('data-letter');
+                char = $el.attr("data-letter");
 
             if (!char) {
                 return;
-            } else if (/^[_ ]$/.test(char)) {
+            } else if (char === " ") {
                 char = "_";
             }
 
@@ -200,12 +232,12 @@ $(document).ready(function() {
         });
 
         $.ajax({
-            contentType: 'application/json',
+            contentType: "application/json",
             data: JSON.stringify({board, rack}),
-            dataType: 'json',
+            dataType: "json",
             timeout: 0,
-            type: 'POST',
-            url: '/process/'
+            type: "POST",
+            url: "/process/"
         }).done(function() {
             console.log("ajax request: success");
         })
@@ -218,7 +250,35 @@ $(document).ready(function() {
         console.log(board);
         console.log(rack);
     });
+
+    $(".solutions").on("click", "li", function(e) {
+        var $el = $(e.target).closest("li"),
+            word = $el.data("word"),
+            x = $el.data("x"),
+            y = $el.data("y"),
+            direction = $el.data("direction");
+
+        $(".board .board-tile.suggestion").removeAttr("data-letter").removeClass("suggestion");
+
+        $(".solutions li.active").removeClass("active");
+        $el.addClass("active");
+
+        _.toArray(word).forEach(function(letter) {
+            var $tile = $(`.board .board-tile[data-x=${x}][data-y=${y}]`);
+
+            if (direction === 0) {
+                x += 1;
+            } else {
+                y += 1;
+            }
+
+            if (!$tile.attr("data-letter")) {
+                $tile.attr("data-letter", letter).addClass("suggestion");
+            }
+        })
+
+    });
 });
 
-// Used to initialize data so we don't need to type it out every time
+// Used to initialize data so we don"t need to type it out every time
 import "./test_data";

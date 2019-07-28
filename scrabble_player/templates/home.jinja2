@@ -14,9 +14,9 @@
 {% set tile_class_mapping = {
     '-': 'board-tile-nothing',
     '1': 'board-tile-tripple-word',
-    '2': 'board-tile-double-letter',
+    '2': 'board-tile-tripple-letter',
     '3': 'board-tile-double-word',
-    '4': 'board-tile-tripple-letter',
+    '4': 'board-tile-double-letter',
     '5': 'board-tile-center',
 } %}
 
@@ -25,21 +25,29 @@
 <input type="hidden" value="{{ board_cols }}" id="board-cols" />
 <div class="content">
     <center>
-        <div class="board">
-            {% for y in range(board_rows) %}
-                {% for x in range(board_cols) %}
-                    <span data-x="{{ x }}" data-y="{{ y }}" class="board-tile {{ tile_class_mapping[board[y * board_cols + x]] }}">
-                        <input maxlength="1" type="text"/ >
-                    </span>
+        <div class="board-container">
+            <div class="board">
+                {% for y in range(board_rows) %}
+                    {% for x in range(board_cols) %}
+                        <span data-x="{{ x }}" data-y="{{ y }}" class="board-tile {{ tile_class_mapping[board[y * board_cols + x]] }}">
+                            <input maxlength="1" type="text"/ >
+                        </span>
+                    {% endfor %}
+                    <br />
                 {% endfor %}
-                <br />
-            {% endfor %}
+            </div>
+
+            <div class="solutions">
+                <ul></ul>
+            </div>
         </div>
 
         <div class="rack">
-            <span class="rack-tile">
+            {% for i in range(rack_size) %}
+            <span class="rack-tile" data-i="{{ i }}">
                 <input maxlength="1" type="text" />
             </span>
+            {% endfor %}
         </div>
 
         <div class="buttons">
