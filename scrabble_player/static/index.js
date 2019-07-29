@@ -144,6 +144,10 @@ $(document).ready(function() {
     $(".rack").on("click", ".rackTile", function(e) {
         var $el = $(e.target);
 
+        if (!$el.attr("data-letter")) {
+            $el = $(".rackTile:not([data-letter])").eq(0);
+        }
+
         $(".rack .rackTile.inputVisible").removeClass("inputVisible");
         $(".board .boardTile.inputVisible").removeClass("inputVisible");
 
