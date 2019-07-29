@@ -13,6 +13,7 @@
     "bootstrap": "^4.3.1",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^0.28.7",
+    "eslint": "^6.1.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "jquery": "^3.4.1",
     "jsdom": "^15.1.1",
@@ -29,6 +30,7 @@
   "scripts": {
     "build": "webpack --config webpack.config.js -d --progress --colors",
     "build-prod": "rm -rf pyramid_scaffold/webpack && webpack --config webpack.config.js -p --progress --colors && python setup.py sdist",
+    "lint": "sass-lint -v && eslint scrabble_player/static/**/*js",
     "watch": "webpack --config webpack.config.js -d --progress --colors --watch"
   },
   "dependencies": {

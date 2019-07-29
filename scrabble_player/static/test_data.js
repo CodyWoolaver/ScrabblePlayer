@@ -1,7 +1,8 @@
 const $ = require("jquery");
 const _ = require("underscore");
 
-const init_board = [
+/* eslint-disable */
+const initBoard = [
     {x:10, y:11, letter: "B"},
     {x:10, y:12, letter: "A"},
     {x:10, y:13, letter: "Y"},
@@ -56,7 +57,7 @@ const init_board = [
     {x:9,  y:9,  letter: "O"}
 ];
 
-const init_rack = _.sample([
+const initRack = _.sample([
     "_AENSTT",
     "_DEEGST",
     "AABCDER",
@@ -66,7 +67,7 @@ const init_rack = _.sample([
     "IINOOSU",
 ]);
 
-const init_suggestions = {
+const initSuggestions = {
     "EIJMOOY": [
         {word: "JIMPY", position: {x: 0, y: 7}, direction: 0, others: []},
         {word: "JIMP", position: {x: 0, y: 7}, direction: 0, others: []},
@@ -257,10 +258,10 @@ const init_suggestions = {
         {word: "GEdS", position: {x: 11, y: 14}, direction: 0, others: ["QUINCES"]},
     ]
 }
-
+/* eslint-enable */
 
 $(document).ready(function() {
-    init_board.forEach(function(item) {
+    initBoard.forEach(function(item) {
         $(`.board .boardTile[data-x=${item.x}][data-y=${item.y}]`)
             .attr("data-letter", item.letter)
             .find("input")
@@ -268,29 +269,30 @@ $(document).ready(function() {
     });
 
     var i = 0;
-    _.shuffle(_.toArray(init_rack)).forEach(function(letter) {
+    _.shuffle(_.toArray(initRack)).forEach(function(letter) {
+        var usedLetter = letter;
         if (letter === "_") {
-            letter = " ";
+            usedLetter = " ";
         }
 
         $(`.rack .rackTile[data-i=${i}]`)
-            .attr('data-letter', letter)
+            .attr('data-letter', usedLetter)
             .find('input')
-            .val(letter);
+            .val(usedLetter);
 
         i += 1;
     });
 
-    init_suggestions[init_rack].forEach(function(suggestion) {
+    initSuggestions[initRack].forEach(function(suggestion) {
         $("<li>", {
-            "data-x": suggestion.position.x,
-            "data-y": suggestion.position.y,
             "data-direction": suggestion.direction,
-            "data-word": suggestion.word
+            "data-word": suggestion.word,
+            "data-x": suggestion.position.x,
+            "data-y": suggestion.position.y
         }).html([
             $("<div>", {"class": "word"}).text(suggestion.word),
             $("<div>", {"class": "points"}).text("xx Points"),
-            $("<div>", {"class": "others"}).text(suggestion.others),
+            $("<div>", {"class": "others"}).text(suggestion.others)
         ]).appendTo(".suggestions ul");
     });
 });

@@ -132,7 +132,7 @@ $(document).ready(function() {
         }
     });
 
-    $(".rack").on("click", function(e) {
+    $(".rack").on("click", function() {
         var $nextTile = $(".rackTile:not([data-letter])").eq(0);
 
         $(".rack .rackTile.inputVisible").removeClass("inputVisible");
@@ -224,7 +224,7 @@ $(document).ready(function() {
         organizeTileRack();
     });
 
-    $("#submit").on("click", function(e) {
+    $("#submit").on("click", function() {
         var rows = parseInt($("#boardRows").val(), 10),
             cols = parseInt($("#boardCols").val(), 10),
             board = new Array(rows).fill(null).map(function () {
