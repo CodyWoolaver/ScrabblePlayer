@@ -5,3 +5,4 @@ pyramid_jinja2
 pyramid_retry
 pyramid_webpack
 waitress
+flake8

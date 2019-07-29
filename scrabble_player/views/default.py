@@ -6,6 +6,7 @@ from scrabble_player.utils.board_configurations import DATA as board_data
 BOARD_NAME = "Scrabble"
 RACK_SIZE = 7
 
+
 @view_config(route_name='home', renderer='../templates/home.jinja2')
 def home(request):
 

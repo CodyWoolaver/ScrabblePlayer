@@ -1,6 +1,5 @@
 from colorama import Fore, Back, Style
 
-import sys
 
 class Board(object):
     def __init__(self, board):

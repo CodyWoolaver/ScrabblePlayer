@@ -5,12 +5,17 @@
 #    pip-compile
 #
 colorama==0.4.1
+entrypoints==0.3          # via flake8
+flake8==3.7.8
 hupper==1.8.1             # via pyramid
 jinja2==2.10.1            # via pyramid-jinja2
 markupsafe==1.1.1         # via jinja2, pyramid-jinja2
+mccabe==0.6.1             # via flake8
 pastedeploy==2.0.1        # via plaster-pastedeploy
 plaster-pastedeploy==0.7
 plaster==1.0              # via plaster-pastedeploy, pyramid
+pycodestyle==2.5.0        # via flake8
+pyflakes==2.1.1           # via flake8
 pyramid-jinja2==2.8
 pyramid-retry==2.0
 pyramid-webpack==0.1.3

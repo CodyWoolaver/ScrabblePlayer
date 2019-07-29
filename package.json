@@ -30,7 +30,7 @@
   "scripts": {
     "build": "webpack --config webpack.config.js -d --progress --colors",
     "build-prod": "rm -rf pyramid_scaffold/webpack && webpack --config webpack.config.js -p --progress --colors && python setup.py sdist",
-    "lint": "sass-lint -v && eslint scrabble_player/static/**/*js",
+    "lint": "sass-lint -v && eslint scrabble_player/static/**/*js && flake8 scrabble_player",
     "watch": "webpack --config webpack.config.js -d --progress --colors --watch"
   },
   "dependencies": {
