@@ -242,8 +242,10 @@ $(document).ready(function() {
             $el.val("");
         }
 
-        $(".suggestions ul").empty();
-        $("#applySuggestion").addClass("disabled");
+        if (isLetter || isRemoval) {
+            $(".suggestions ul").empty();
+            $("#applySuggestion").addClass("disabled");
+        }
 
         $nextTile.addClass("inputVisible");
         $nextTile.find("input").focus();
