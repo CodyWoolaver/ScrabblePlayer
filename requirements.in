@@ -1,8 +1,8 @@
 colorama
+flake8
 plaster_pastedeploy
 pyramid
 pyramid_jinja2
 pyramid_retry
 pyramid_webpack
 waitress
-flake8
