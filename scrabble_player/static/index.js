@@ -25,7 +25,7 @@ const organizeTileRack = function() {
     });
 };
 
-const removeSuggestion = function () {
+const removeSuggestion = function() {
     $(".board .boardTile.suggestion").removeAttr("data-letter").removeClass("suggestion");
     $(".suggestions .active").removeClass("active");
     $("#applySuggestion").addClass("disabled");
@@ -251,7 +251,7 @@ $(document).ready(function() {
     $("#submit").on("click", function() {
         var rows = parseInt($("#boardRows").val(), 10),
             cols = parseInt($("#boardCols").val(), 10),
-            board = new Array(rows).fill(null).map(function () {
+            board = new Array(rows).fill(null).map(function() {
                 return new Array(cols).fill(null);
             }),
             rack = new Array();
