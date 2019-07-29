@@ -48,7 +48,7 @@ $board-tile-center: rgb(255, 199, 186);
         }
 
         &:not([data-letter]):not(.inputVisible) {
-            background-color: $rack-dark-background;
+            background-color: $rack-background;
         }
 
         input {

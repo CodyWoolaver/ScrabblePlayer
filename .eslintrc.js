@@ -82,7 +82,10 @@ module.exports = {
         "indent": "off",
         "indent-legacy": "error",
         "init-declarations": "off",
-        "jsx-quotes": "error",
+        "jsx-quotes": [
+            "error",
+            "prefer-double"
+        ],
         "key-spacing": "error",
         "keyword-spacing": [
             "error",
@@ -258,7 +261,7 @@ module.exports = {
         "require-jsdoc": "error",
         "require-unicode-regexp": "off",
         "rest-spread-spacing": "error",
-        "semi": "off",
+        "semi": "error",
         "semi-spacing": "error",
         "semi-style": [
             "error",

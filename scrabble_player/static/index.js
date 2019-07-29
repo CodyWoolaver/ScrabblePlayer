@@ -1,5 +1,5 @@
 import "./main.scss";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 import "bootstrap";
 
@@ -22,7 +22,7 @@ const organizeTileRack = function() {
                 }
             }
         }
-    })
+    });
 };
 
 const removeSuggestion = function () {
@@ -89,9 +89,13 @@ $(document).ready(function() {
             value = e.key.toUpperCase();
             $el.val(value);
             removeSuggestion();
+            $(".suggestions ul").empty();
         }
 
         if (isRemoval && $parent.attr("data-letter")) {
+            if (!$parent.hasClass("suggestion")) {
+                $(".suggestions ul").empty();
+            }
             removeSuggestion();
         }
 
@@ -101,6 +105,7 @@ $(document).ready(function() {
             !isRemoval // Backspace + Delete
         ) {
             $el.val("");
+            $parent.removeAttr("data-letter");
             return;
         }
 
@@ -122,20 +127,21 @@ $(document).ready(function() {
             $nextTile = $(`.board .boardTile[data-x=${x}][data-y=${y + 1}]`);
         }
 
-        $parent.removeClass("selected selectedDown selectedRight")
+        $parent.removeClass("selected selectedDown selectedRight");
 
         if (isLetter && !!value) {
             $parent.attr("data-letter", value);
         } else if (isRemoval) {
             $parent.removeAttr("data-letter");
             $el.val("");
+
             if ($parent.hasClass("suggestion")) {
                 removeSuggestion();
             }
         }
 
         if ($nextTile) {
-            $parent.removeClass("selected selectedRight selectedDown")
+            $parent.removeClass("selected selectedRight selectedDown");
             $nextTile.addClass("selected").addClass(LAST_DIRECTION);
             $nextTile.find("input").focus();
         }
@@ -143,6 +149,10 @@ $(document).ready(function() {
 
     $(".rack").on("click", function() {
         var $nextTile = $(".rackTile:not([data-letter])").eq(0);
+
+        if ($nextTile.length === 0) {
+            $nextTile = $(".rackTile:last-child");
+        }
 
         $(".rack .rackTile.inputVisible").removeClass("inputVisible");
         $(".board .boardTile.inputVisible").removeClass("inputVisible");
@@ -165,7 +175,7 @@ $(document).ready(function() {
     });
 
     $(".rack").on("focus", ".rackTile > input", function(e) {
-        e.target.setSelectionRange(0, 1)
+        e.target.setSelectionRange(0, 1);
     });
 
     $(".rack").on("focusout", ".rackTile > input", function(e) {
@@ -199,6 +209,7 @@ $(document).ready(function() {
             !isRemoval // Backspace + Delete
         ) {
             $el.val("");
+            $parent.removeAttr("data-letter");
             return;
         }
 
@@ -220,7 +231,7 @@ $(document).ready(function() {
             $nextTile = $(`.rack .rackTile[data-i=${i + 1}]`);
         }
 
-        $parent.removeClass("inputVisible")
+        $parent.removeClass("inputVisible");
         if (isLetter && !!value) {
             $parent.attr("data-letter", value);
         } else if (isRemoval) {
@@ -324,7 +335,7 @@ $(document).ready(function() {
             if (!$tile.attr("data-letter")) {
                 $tile.attr("data-letter", letter).addClass("suggestion");
             }
-        })
+        });
     });
 
     $("#applySuggestion").on("click", function(e) {
@@ -338,7 +349,7 @@ $(document).ready(function() {
             var $el = $(this),
                 letter = $el.data("letter");
             $el.removeClass("suggestion").find("input").val(letter);
-            $(`.rack .rackTile[data-letter=${letter}]`).eq(0).removeAttr('data-letter').find('input').val("");
+            $(`.rack .rackTile[data-letter=${letter}]`).eq(0).removeAttr("data-letter").find("input").val("");
         });
 
         organizeTileRack();
