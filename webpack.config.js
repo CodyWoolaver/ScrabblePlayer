@@ -2,6 +2,7 @@ const path = require("path");
 const BundleTracker = require('webpack-bundle-tracker');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   context: path.join(__dirname, '/scrabble_player/static/'),
@@ -13,6 +14,12 @@ module.exports = {
   plugins: [
     new BundleTracker({filename: './scrabble_player/webpack/stats.json'}),
     new ExtractTextPlugin('[name]-[hash].css'),
+    new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+        Popper: ['popper.js', 'default'],
+    }),
     new CleanWebpackPlugin(),
   ],
   module: {

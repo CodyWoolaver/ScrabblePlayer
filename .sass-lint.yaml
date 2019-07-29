@@ -1,0 +1,18 @@
+files:
+  include: 'scrabble_player/static/**/*.s+(a|c)ss'
+rules:
+  indentation:
+    - 2
+    - size: 4
+  nesting-depth:
+    - 1
+    - max-depth: 6
+  class-name-format:
+    - 1
+    - convention: 'camelcase'
+  force-attribute-nesting:
+    - 0
+  force-pseudo-nesting:
+    - 0
+  no-color-literals:
+    - 0

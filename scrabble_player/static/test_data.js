@@ -66,7 +66,7 @@ const init_rack = _.sample([
     "IINOOSU",
 ]);
 
-const init_solutions = {
+const init_suggestions = {
     "EIJMOOY": [
         {word: "JIMPY", position: {x: 0, y: 7}, direction: 0, others: []},
         {word: "JIMP", position: {x: 0, y: 7}, direction: 0, others: []},
@@ -261,7 +261,7 @@ const init_solutions = {
 
 $(document).ready(function() {
     init_board.forEach(function(item) {
-        $(`.board .board-tile[data-x=${item.x}][data-y=${item.y}]`)
+        $(`.board .boardTile[data-x=${item.x}][data-y=${item.y}]`)
             .attr("data-letter", item.letter)
             .find("input")
             .val(item.letter);
@@ -273,7 +273,7 @@ $(document).ready(function() {
             letter = " ";
         }
 
-        $(`.rack .rack-tile[data-i=${i}]`)
+        $(`.rack .rackTile[data-i=${i}]`)
             .attr('data-letter', letter)
             .find('input')
             .val(letter);
@@ -281,24 +281,16 @@ $(document).ready(function() {
         i += 1;
     });
 
-    init_solutions[init_rack].forEach(function(solution) {
+    init_suggestions[init_rack].forEach(function(suggestion) {
         $("<li>", {
-            "data-x": solution.position.x,
-            "data-y": solution.position.y,
-            "data-direction": solution.direction,
-            "data-word": solution.word
+            "data-x": suggestion.position.x,
+            "data-y": suggestion.position.y,
+            "data-direction": suggestion.direction,
+            "data-word": suggestion.word
         }).html([
-            $("<div>", {"class": "word"}).text(solution.word),
+            $("<div>", {"class": "word"}).text(suggestion.word),
             $("<div>", {"class": "points"}).text("xx Points"),
-            $("<div>", {"class": "others"}).text(solution.others),
-        ]).appendTo(".solutions ul");
+            $("<div>", {"class": "others"}).text(suggestion.others),
+        ]).appendTo(".suggestions ul");
     });
 });
-
-
-
-// <li data-start-x="" data-start-y="" data-orientation="" data-word="JOE">
-//     <div class="word">JOE</div>
-//     <div class="points">14 Points (11.08 Value)</div>
-//     <div class="others">Also makes: PE
-// </li>  

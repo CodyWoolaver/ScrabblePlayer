@@ -3,65 +3,65 @@
 }
 
 $rack-background: rgb(124, 111, 89);
+
 .rack {
-    margin-top: 30px;
     background-color: $rack-background;
+    font-size: 0;
     height: 55px;
+    margin-top: 30px;
     width: 500px;
-    font-size: 0px;
 
-    .rack-tile {
-        display: inline-block;
-
-        font-size: 14px;
-
-        line-height: 35px;
-        height: 35px;
-        width: 35px;
-        margin: 10px 2px;
+    .rackTile {
         border: 0;
-
+        display: inline-block;
+        font-size: 14px;
+        height: 35px;
+        line-height: 35px;
+        margin: 10px 2px;
         text-align: center;
+        width: 35px;
 
-        &:not(.input-visible)::after {
-            display: inline-block;
-            zoom: 1;
-            height: 1em;
-            font-size: 1em;
+        &:not(.inputVisible)::after {
             content: '';
+            display: inline-block;
+            font-size: 1em;
+            height: 1em;
+            zoom: 1;
         }
 
-        &:not([data-letter]):not(.input-visible) {
+        &:not([data-letter]):not(.inputVisible) {
             background-color: darken($rack-background, 10%);
         }
 
         input {
             background-color: darken($rack-background, 10%);
-            display: none;
-            text-align: center;
-            height: 35px;
-            width: 35px;
             border: 0;
+            display: none;
+            height: 35px;
+            text-align: center;
+            width: 35px;
 
             &:focus {
                 outline: 0;
             }
+
             &::selection {
-              background: transparent;
+                background: transparent;
             }
 
         }
 
-        &.input-visible input {
-            display: inline-block;
+        &.inputVisible {
+            input {
+                display: inline-block;
+            }
         }
     }
 
-    .rack-tile[data-letter]:not(.input-visible) {
+    .rackTile[data-letter]:not(.inputVisible) {
         background-color: rgb(243, 204, 139);
-
+        border: 1px solid #000;
         font-weight: bold;
-        border: 1px solid black;
 
         &::after {
             content: attr(data-letter);
@@ -74,68 +74,71 @@ $rack-background: rgb(124, 111, 89);
     margin-top: 30px;
 }
 
-.board-container {
+.boardContainer {
     position: relative;
 
     .board {
+        display: inline-block;
         font-size: 0;
         padding: 1px;
-        display: inline-block;
 
-        .board-tile {
-            display: inline-block;
-
-            font-size: 14px;
-
-            line-height: 35px;
-            height: 35px;
-            width: 35px;
-            margin: 1px;
+        .boardTile {
             border: 1px solid transparent;
-
+            display: inline-block;
+            font-size: 14px;
+            height: 35px;
+            line-height: 35px;
+            margin: 1px;
             text-align: center;
+            width: 35px;
 
             &.selected {
-                &.selected-right input {
-                    border-right: 3px solid green;
+                input {
+                    display: inline-block;
                 }
-                &.selected-down input {
-                    border-bottom: 3px solid green;
+
+                &.selectedRight {
+                    input {
+                        border-right: 3px solid rgb(117, 190, 87);
+                    }
+                }
+
+                &.selectedDown {
+                    input {
+                        border-bottom: 3px solid rgb(117, 190, 87);
+                    }
                 }
             }
 
             &:not(.selected)::after {
-                display: inline-block;
-                zoom: 1;
-                height: 1em;
-                font-size: 1em;
                 content: '';
+                display: inline-block;
+                font-size: 1em;
+                height: 1em;
+                zoom: 1;
             }
 
             input {
-                display: none;
-                text-align: center;
-                height: 30px;
-                width: 30px;
                 border: 0;
+                display: none;
+                height: 30px;
+                text-align: center;
+                width: 30px;
 
-                &:focus{
-                    outline:0;
+                &:focus {
+                    outline: 0;
                 }
+
                 &::selection {
-                  background: transparent;
+                    background: transparent;
                 }
-            }
-
-            &.selected input {
-                display: inline-block;
             }
         }
 
-        .board-tile[data-letter]:not(.selected) {
+        .boardTile[data-letter]:not(.selected) {
             background-color: rgb(243, 204, 139);
+            border: 1px solid #000;
             font-weight: bold;
-            border: 1px solid black;
 
             &.suggestion {
                 background-color: rgb(139, 243, 139);
@@ -148,40 +151,45 @@ $rack-background: rgb(124, 111, 89);
         }
 
         :not([data-letter]):not(.selected) {
-            &.board-tile-nothing {
+            &.boardTileNothing {
                 background-color: rgb(206, 197, 168);
             }
 
-            &.board-tile-tripple-word {
+            &.boardTileTrippleWord {
                 background-color: rgb(255, 109, 83);
+
                 &::after {
                     content: 'TW';
                 }
             }
 
-            &.board-tile-double-letter {
+            &.boardTileDoubleLetter {
                 background-color: rgb(192, 218, 217);
+
                 &::after {
                     content: 'DL';
                 }
             }
 
-            &.board-tile-double-word {
+            &.boardTileDoubleWord {
                 background-color: rgb(255, 199, 186);
+
                 &::after {
                     content: 'DW';
                 }
             }
 
-            &.board-tile-tripple-letter {
+            &.boardTileTrippleLetter {
                 background-color: rgb(0, 149, 170);
+
                 &::after {
                     content: 'TL';
                 }
             }
 
-            &.board-tile-center {
+            &.boardTileCenter {
                 background-color: rgb(255, 199, 186);
+
                 &::after {
                     content: '\2605';
                 }
@@ -190,25 +198,27 @@ $rack-background: rgb(124, 111, 89);
     }
 }
 
-.solutions {
-    display: inline-block;
-    position: absolute;
-    height: 100%;
-    width: 260px;
-    max-width: 260px;
+.suggestions {
     border: 1px solid #ccc;
+    display: inline-block;
+    height: 100%;
+    max-width: 260px;
     overflow-y: auto;
+    position: absolute;
+    width: 260px;
 
     ul {
         list-style-type: none;
-        padding: 0px;
+        padding: 0;
         text-align: left;
 
         $border: 1px dashed #ccc;
         $highlight: rgb(223, 240, 216);
+
         li {
-            padding: 10px;
             border-top: $border;
+            cursor: pointer;
+            padding: 10px;
 
             .word {
                 font-weight: bold;
@@ -217,9 +227,9 @@ $rack-background: rgb(124, 111, 89);
             &.active {
                 background-color: darken($highlight, 35%);
             }
+
             &:hover:not(.active) {
                 background-color: $highlight;
-                cursor: pointer;
             }
 
             &:first-child {

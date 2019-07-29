@@ -8,28 +8,27 @@
     {% webpack 'main', '.css' -%}
         <link rel="stylesheet" type="text/css" href="{{ ASSET.url }}">
     {% endwebpack %}
-
 {% endblock %}
 
 {% set tile_class_mapping = {
-    '-': 'board-tile-nothing',
-    '1': 'board-tile-tripple-word',
-    '2': 'board-tile-tripple-letter',
-    '3': 'board-tile-double-word',
-    '4': 'board-tile-double-letter',
-    '5': 'board-tile-center',
+    '-': 'boardTileNothing',
+    '1': 'boardTileTrippleWord',
+    '2': 'boardTileTrippleLetter',
+    '3': 'boardTileDoubleWord',
+    '4': 'boardTileDoubleLetter',
+    '5': 'boardTileCenter',
 } %}
 
 {% block content %}
-<input type="hidden" value="{{ board_rows }}" id="board-rows" />
-<input type="hidden" value="{{ board_cols }}" id="board-cols" />
+<input type="hidden" value="{{ board_rows }}" id="boardRows" />
+<input type="hidden" value="{{ board_cols }}" id="boardCols" />
 <div class="content">
     <center>
-        <div class="board-container">
+        <div class="boardContainer">
             <div class="board">
                 {% for y in range(board_rows) %}
                     {% for x in range(board_cols) %}
-                        <span data-x="{{ x }}" data-y="{{ y }}" class="board-tile {{ tile_class_mapping[board[y * board_cols + x]] }}">
+                        <span data-x="{{ x }}" data-y="{{ y }}" class="boardTile {{ tile_class_mapping[board[y * board_cols + x]] }}">
                             <input maxlength="1" type="text"/ >
                         </span>
                     {% endfor %}
@@ -37,22 +36,45 @@
                 {% endfor %}
             </div>
 
-            <div class="solutions">
+            <div class="suggestions">
                 <ul></ul>
             </div>
         </div>
 
         <div class="rack">
             {% for i in range(rack_size) %}
-            <span class="rack-tile" data-i="{{ i }}">
+            <span class="rackTile" data-i="{{ i }}">
                 <input maxlength="1" type="text" />
             </span>
             {% endfor %}
         </div>
 
         <div class="buttons">
-          <button id="submit" type="button" class="btn btn-secondary">Submit</button>
+          <button id="submit" type="button" class="btn btn-outline-primary">Get Suggestions</button>
+          <button id="applySuggestion" type="button" class="btn btn-outline-success disabled">Apply Suggestion</button>
+          <button id="clean" type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#confirmClean">Clear Game</button>
         </div>
     </center>
+</div>
+
+<!-- Modals -->
+<div class="modal fade" id="confirmClean" role="dialog" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Restart?</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure that you wish to start over?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="confirmCleanSubmit" type="button" class="btn btn-primary" data-dismiss="modal">Yes, clear the board</button>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock content %}
