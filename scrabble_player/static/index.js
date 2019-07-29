@@ -218,6 +218,9 @@ $(document).ready(function() {
         } else if (code === "ArrowLeft") {
             $nextTile = $parent.prev();
         } else if (code === "ArrowRight") {
+            if (!$parent.attr('data-letter')) {
+                return;
+            }
             $nextTile = $parent.next();
         } else if (code === "Delete") {
             $nextTile = $(`.rack .rackTile[data-i=${i}]`);
