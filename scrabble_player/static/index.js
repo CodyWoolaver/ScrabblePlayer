@@ -6,7 +6,6 @@ import "bootstrap";
 const $ = require("jquery");
 const _ = require("underscore");
 
-
 const organizeTileRack = function() {
     $(".rack .rackTile").each(function(){
         var $el = $(this),
@@ -24,7 +23,13 @@ const organizeTileRack = function() {
             }
         }
     })
-}
+};
+
+const removeSuggestion = function () {
+    $(".board .boardTile.suggestion").removeAttr("data-letter").removeClass("suggestion");
+    $(".suggestions .active").removeClass("active");
+    $("#applySuggestion").addClass("disabled");
+};
 
 $(document).ready(function() {
     var LAST_DIRECTION = "selectedRight";
@@ -83,7 +88,11 @@ $(document).ready(function() {
         if (isLetter) { // A-Z
             value = e.key.toUpperCase();
             $el.val(value);
-            $(".board .boardTile.suggestion").removeAttr("data-letter").removeClass("suggestion");
+            removeSuggestion();
+        }
+
+        if (isRemoval && $parent.attr("data-letter")) {
+            removeSuggestion();
         }
 
         if (
@@ -103,9 +112,9 @@ $(document).ready(function() {
             $parent.removeClass("selectedDown").addClass("selectedRight");
             LAST_DIRECTION = "selectedRight";
             return;
-        } else if (code === "ArrowUp") {
+        } else if (code === "ArrowUp" || (code === "Backspace" && $parent.hasClass("selectedDown"))) {
             $nextTile = $(`.board .boardTile[data-x=${x}][data-y=${y - 1}]`);
-        } else if (code === "ArrowLeft" || code === "Backspace") {
+        } else if (code === "ArrowLeft" || (code === "Backspace" && $parent.hasClass("selectedRight"))) {
             $nextTile = $(`.board .boardTile[data-x=${x - 1}][data-y=${y}]`);
         } else if (code === "ArrowRight" || $parent.hasClass("selectedRight")) {
             $nextTile = $(`.board .boardTile[data-x=${x + 1}][data-y=${y}]`);
@@ -121,7 +130,7 @@ $(document).ready(function() {
             $parent.removeAttr("data-letter");
             $el.val("");
             if ($parent.hasClass("suggestion")) {
-                $(".board .boardTile.suggestion").removeAttr("data-letter").removeClass("suggestion");
+                removeSuggestion();
             }
         }
 
