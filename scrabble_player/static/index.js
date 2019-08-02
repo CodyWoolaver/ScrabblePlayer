@@ -352,9 +352,15 @@ $(document).ready(function() {
 
         $(".board .boardTile.suggestion").each(function() {
             var $el = $(this),
-                letter = $el.data("letter");
+                letter = $el.data("letter"),
+                $rackLetter = $(`.rack .rackTile[data-letter=${letter}]`);
+
+            if ($rackLetter.length === 0) {
+                $rackLetter = $(".rack .rackTile[data-letter=' ']");
+            }
+
             $el.removeClass("suggestion").find("input").val(letter);
-            $(`.rack .rackTile[data-letter=${letter}]`).eq(0).removeAttr("data-letter").find("input").val("");
+            $rackLetter.eq(0).removeAttr("data-letter").find("input").val("");
         });
 
         organizeTileRack();

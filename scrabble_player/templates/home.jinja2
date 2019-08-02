@@ -36,8 +36,11 @@
                 {% endfor %}
             </div>
 
-            <div class="suggestions">
-                <ul></ul>
+            <div class="suggestionContainer">
+                <div class="suggestions">
+                    <ul></ul>
+                </div>
+                <button id="applySuggestion" type="button" class="btn btn-outline-success applySuggestion disabled">Apply Suggestion</button>
             </div>
         </div>
 
@@ -51,7 +54,6 @@
 
         <div class="buttons">
           <button id="submit" type="button" class="btn btn-outline-primary">Get Suggestions</button>
-          <button id="applySuggestion" type="button" class="btn btn-outline-success disabled">Apply Suggestion</button>
           <button id="clean" type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#confirmClean">Clear Game</button>
         </div>
     </center>

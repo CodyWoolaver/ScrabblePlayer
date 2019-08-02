@@ -223,42 +223,51 @@ $board-tile-center: rgb(255, 199, 186);
     }
 }
 
-.suggestions {
-    border: $border;
+.suggestionContainer {
     display: inline-block;
     height: 100%;
     margin-left: 20px;
     max-width: 260px;
-    overflow-y: auto;
     position: absolute;
     width: 260px;
 
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        text-align: left;
+    .applySuggestion {
+        margin-top: 12px;
+    }
 
-        li {
-            border-top: $border;
-            border-top-style: dashed;
-            cursor: pointer;
-            padding: 10px;
+    .suggestions {
+        border: $border;
+        height: 90%;
+        overflow-y: auto;
 
-            .word {
-                font-weight: bold;
-            }
+        ul {
+            height: 100%;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: left;
 
-            &.active {
-                background-color: darken($suggestion-highlight, 35%);
-            }
+            li {
+                border-top: $border;
+                border-top-style: dashed;
+                cursor: pointer;
+                padding: 10px;
 
-            &:hover:not(.active) {
-                background-color: $suggestion-highlight;
-            }
+                .word {
+                    font-weight: bold;
+                }
 
-            &:first-child {
-                border: 0;
+                &.active {
+                    background-color: darken($suggestion-highlight, 35%);
+                }
+
+                &:hover:not(.active) {
+                    background-color: $suggestion-highlight;
+                }
+
+                &:first-child {
+                    border: 0;
+                }
             }
         }
     }
