@@ -26,7 +26,7 @@ def process(request):
     rack = Rack(rack)
 
     standard_board = Board(board)
-    rotated_board = Board(zip(*[row for row in board]))
+    rotated_board = Board(zip(*board))
 
     print(standard_board)
     print(rotated_board)
