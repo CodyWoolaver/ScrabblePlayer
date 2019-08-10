@@ -171,7 +171,6 @@ $board-tile-center: rgb(255, 199, 186);
 
             &::after {
                 content: attr(data-letter);
-                text-transform: uppercase;
             }
         }
 

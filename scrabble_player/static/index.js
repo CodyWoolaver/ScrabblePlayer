@@ -74,19 +74,20 @@ $(document).ready(function() {
 
     $(".board").on("keyup", ".boardTile > input", function(e) {
         var code = e.code,
+            key = e.key,
             keyCode = e.keyCode,
             $el = $(e.target),
             $parent = $el.parent(),
             x = $parent.data("x"),
             y = $parent.data("y"),
             isSpacebar = keyCode === 32,
-            isLetter = (keyCode >= 65 && keyCode <= 91) || isSpacebar,
+            isLetter = (key.length === 1 && keyCode >= 65 && keyCode <= 91) || isSpacebar,
             isRemoval = keyCode === 8 || keyCode === 46,  // Backspace + Delete
             value = $el.val(),
             $nextTile;
 
         if (isLetter) { // A-Z
-            value = e.key.toUpperCase();
+            value = key.toUpperCase();
             $el.val(value);
             removeSuggestion();
             $(".suggestions ul").empty();
@@ -104,8 +105,10 @@ $(document).ready(function() {
             (keyCode < 37 || keyCode > 40) && // Arrow Keys
             !isRemoval // Backspace + Delete
         ) {
-            $el.val("");
-            $parent.removeAttr("data-letter");
+            if (key.length === 1) {
+                $el.val("");
+                $parent.removeAttr("data-letter");
+            }
             return;
         }
 
@@ -130,7 +133,11 @@ $(document).ready(function() {
         $parent.removeClass("selected selectedDown selectedRight");
 
         if (isLetter && !!value) {
-            $parent.attr("data-letter", value);
+            if (e.shiftKey) {
+                $parent.attr("data-letter", value.toLowerCase());
+            } else {
+                $parent.attr("data-letter", value);
+            }
         } else if (isRemoval) {
             $parent.removeAttr("data-letter");
             $el.val("");
@@ -187,18 +194,19 @@ $(document).ready(function() {
 
     $(".rack").on("keyup", ".rackTile > input", function(e) {
         var code = e.code,
+            key = e.key,
             keyCode = e.keyCode,
             $el = $(e.target),
             $parent = $el.parent(),
             i = $parent.data("i"),
             isSpacebar = keyCode === 32,
-            isLetter = (keyCode >= 65 && keyCode <= 91) || isSpacebar,
+            isLetter = (key.length === 1 && keyCode >= 65 && keyCode <= 91) || isSpacebar,
             isRemoval = keyCode === 8 || keyCode === 46,  // Backspace + Delete
             value = $el.val(),
             $nextTile;
 
         if (isLetter) { // A-Z
-            value = e.key.toUpperCase();
+            value = key.toUpperCase();
             $el.val(value);
             $(".board .boardTile.suggestion").removeAttr("data-letter").removeClass("suggestion");
         }
@@ -208,8 +216,10 @@ $(document).ready(function() {
             (keyCode < 37 || keyCode > 40) && // Arrow Keys
             !isRemoval // Backspace + Delete
         ) {
-            $el.val("");
-            $parent.removeAttr("data-letter");
+            if (key.length === 1) {
+                $el.val("");
+                $parent.removeAttr("data-letter");
+            }
             return;
         }
 
