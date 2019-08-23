@@ -1,6 +1,5 @@
 import "./main.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
-
 import "bootstrap";
 
 const $ = require("jquery");
@@ -70,6 +69,10 @@ $(document).ready(function() {
             $parent = $el.parent();
 
         $parent.removeClass("selected selectedDown selectedRight");
+    });
+
+    $(".board").on("keydown", ".boardTile > input", function(e) {
+        e.preventDefault();
     });
 
     $(".board").on("keyup", ".boardTile > input", function(e) {
@@ -192,6 +195,10 @@ $(document).ready(function() {
         $parent.removeClass("inputVisible");
     });
 
+    $(".rack").on("keydown", ".rackTile > input", function(e) {
+        e.preventDefault();
+    });
+
     $(".rack").on("keyup", ".rackTile > input", function(e) {
         var code = e.code,
             key = e.key,
@@ -242,6 +249,10 @@ $(document).ready(function() {
             }
         } else {
             $nextTile = $(`.rack .rackTile[data-i=${i + 1}]`);
+        }
+
+        if (!isLetter && $nextTile.length === 0) {
+            return;
         }
 
         $parent.removeClass("inputVisible");
@@ -329,15 +340,15 @@ $(document).ready(function() {
 
         $(".board .boardTile.suggestion").removeAttr("data-letter").removeClass("suggestion");
         $(".suggestions li.active").removeClass("active");
-        
+
         if (isActive) {
             $("#applySuggestion").addClass("disabled");
             return;
         }
-        
+
         $el.addClass("active");
         $("#applySuggestion").removeClass("disabled");
-        
+
         _.toArray(word).forEach(function(letter) {
             var $tile = $(`.board .boardTile[data-x=${x}][data-y=${y}]`);
 
