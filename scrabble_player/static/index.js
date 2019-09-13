@@ -4,6 +4,7 @@ import "bootstrap";
 
 const $ = require("jquery");
 const _ = require("underscore");
+const scrollIntoView = require('scroll-into-view');
 
 const organizeTileRack = function() {
     $(".rack .rackTile").each(function(){
@@ -28,6 +29,25 @@ const removeSuggestion = function() {
     $(".board .boardTile.suggestion").removeAttr("data-letter").removeClass("suggestion");
     $(".suggestions .active").removeClass("active");
     $("#applySuggestion").addClass("disabled");
+};
+
+const applySuggestion = function(word, x, y, direction) {
+    var inX = x,
+        inY = y;
+
+    _.toArray(word).forEach(function(letter) {
+        var $tile = $(`.board .boardTile[data-x=${inX}][data-y=${inY}]`);
+
+        if (direction === 0) {
+            inX += 1;
+        } else {
+            inY += 1;
+        }
+
+        if (!$tile.attr("data-letter")) {
+            $tile.attr("data-letter", letter).addClass("suggestion");
+        }
+    });
 };
 
 $(document).ready(function() {
@@ -349,6 +369,7 @@ $(document).ready(function() {
 
         $(".board .boardTile.suggestion").removeAttr("data-letter").removeClass("suggestion");
         $(".suggestions li.active").removeClass("active");
+        $(".suggestions").addClass("focused");
 
         if (isActive) {
             $("#applySuggestion").addClass("disabled");
@@ -358,19 +379,7 @@ $(document).ready(function() {
         $el.addClass("active");
         $("#applySuggestion").removeClass("disabled");
 
-        _.toArray(word).forEach(function(letter) {
-            var $tile = $(`.board .boardTile[data-x=${x}][data-y=${y}]`);
-
-            if (direction === 0) {
-                x += 1;
-            } else {
-                y += 1;
-            }
-
-            if (!$tile.attr("data-letter")) {
-                $tile.attr("data-letter", letter).addClass("suggestion");
-            }
-        });
+        applySuggestion(word, x, y, direction);
     });
 
     $("#applySuggestion").on("click", function(e) {
@@ -396,6 +405,51 @@ $(document).ready(function() {
         organizeTileRack();
         $(".suggestions ul").empty();
         $("#applySuggestion").addClass("disabled");
+    });
+
+    $(window).on('click', function(e) {
+        var $el = $(e.target);
+        if ($el.parents(".suggestions").length === 0) {
+            $(".suggestions").removeClass("focused");
+        }
+    });
+
+    $(window).on('keyup', function(e) {
+        var keyCode = e.keyCode,
+            isUp = keyCode === 38,
+            isDown = keyCode === 40,
+            $currentSuggestion = $(".suggestions.focused li.active"),
+            $nextSuggestion,
+            direction,
+            word,
+            x,
+            y;
+
+        // Only keys we care about and valid state for navigation
+        if (!(isUp || isDown) || $currentSuggestion.length === 0) {
+            return;
+        }
+
+        if (isUp) {
+            $nextSuggestion = $currentSuggestion.prev().addClass("active");
+        } else if (isDown) {
+            $nextSuggestion = $currentSuggestion.next().addClass("active");
+        }
+
+        if ($nextSuggestion.length === 0) {
+            return;
+        }
+        $currentSuggestion.removeClass("active");
+
+        $(".board .boardTile.suggestion").removeAttr("data-letter").removeClass("suggestion");
+
+        word = $nextSuggestion.data("word");
+        x = $nextSuggestion.data("x");
+        y = $nextSuggestion.data("y");
+        direction = $nextSuggestion.data("direction");
+
+        applySuggestion(word, x, y, direction);
+        scrollIntoView($nextSuggestion[0]);
     });
 });
 
