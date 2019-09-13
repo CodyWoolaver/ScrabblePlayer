@@ -83,6 +83,7 @@ $(document).ready(function() {
             $parent = $el.parent(),
             x = $parent.data("x"),
             y = $parent.data("y"),
+            isArrow = keyCode >= 37 && keyCode <= 40,
             isSpacebar = keyCode === 32,
             isLetter = (key.length === 1 && keyCode >= 65 && keyCode <= 91) || isSpacebar,
             isRemoval = keyCode === 8 || keyCode === 46,  // Backspace + Delete
@@ -133,6 +134,16 @@ $(document).ready(function() {
             $nextTile = $(`.board .boardTile[data-x=${x}][data-y=${y + 1}]`);
         }
 
+        if ($nextTile.length === 0) {
+            if (isRemoval) {
+                $parent.removeAttr("data-letter");
+                $el.val("");
+            }
+
+            if (isRemoval || isArrow) {
+                return;
+            }
+        }
         $parent.removeClass("selected selectedDown selectedRight");
 
         if (isLetter && !!value) {
@@ -150,11 +161,9 @@ $(document).ready(function() {
             }
         }
 
-        if ($nextTile) {
-            $parent.removeClass("selected selectedRight selectedDown");
-            $nextTile.addClass("selected").addClass(LAST_DIRECTION);
-            $nextTile.find("input").focus();
-        }
+        $parent.removeClass("selected selectedRight selectedDown");
+        $nextTile.addClass("selected").addClass(LAST_DIRECTION);
+        $nextTile.find("input").focus();
     });
 
     $(".rack").on("click", function() {
