@@ -27,6 +27,7 @@ const organizeTileRack = function() {
 
 const removeSuggestion = function() {
     $(".board .boardTile.suggestion").removeAttr("data-letter").removeClass("suggestion");
+    $(".suggestions.focused").removeClass("focused")
     $(".suggestions .active").removeClass("active");
     $("#applySuggestion").addClass("disabled");
 };
@@ -66,6 +67,7 @@ $(document).ready(function() {
             .find("input")
             .val("");
 
+        $(".suggestions.focused").removeClass("focused")
         $(".suggestions ul").empty();
         $("#applySuggestion").addClass("disabled");
     });
@@ -293,6 +295,7 @@ $(document).ready(function() {
         }
 
         if (isLetter || isRemoval) {
+            $(".suggestions.focused").removeClass("focused");
             $(".suggestions ul").empty();
             $("#applySuggestion").addClass("disabled");
         }
@@ -403,6 +406,7 @@ $(document).ready(function() {
         });
 
         organizeTileRack();
+        $(".suggestions.focused").removeClass("focused");
         $(".suggestions ul").empty();
         $("#applySuggestion").addClass("disabled");
     });
