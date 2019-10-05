@@ -29,7 +29,7 @@ setup(
     author='Cody Woolaver',
     author_email='pyro.699@gmail.com',
 
-    url='https://github.com/CodyWoolaver/scrabble-player',
+    url='https://github.com/CodyWoolaver/ScrabblePlayer',
 
     description='Scrabble Player',
     long_description=README,

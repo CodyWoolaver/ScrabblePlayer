@@ -1,1 +1,1 @@
-# scrabble-player
+# ScrabblePlayer
