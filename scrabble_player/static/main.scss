@@ -53,6 +53,7 @@ $board-tile-center: rgb(255, 199, 186);
 
         input {
             background-color: $rack-dark-background;
+            font-weight: 300;
             border: 0;
             display: none;
             height: 35px;
@@ -114,6 +115,7 @@ $board-tile-center: rgb(255, 199, 186);
 
             &.selected {
                 input {
+                    border: 3px solid transparent;
                     display: inline-block;
                 }
 
