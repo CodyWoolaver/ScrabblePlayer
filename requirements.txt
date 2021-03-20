@@ -5,28 +5,77 @@
 #    pip-compile
 #
 colorama==0.4.1
-entrypoints==0.3          # via flake8
+    # via -r requirements.in
+configparser==4.0.2
+    # via
+    #   entrypoints
+    #   flake8
+entrypoints==0.3
+    # via flake8
+enum34==1.1.10
+    # via flake8
 flake8==3.7.8
-hupper==1.8.1             # via pyramid
-jinja2==2.10.1            # via pyramid-jinja2
-markupsafe==1.1.1         # via jinja2, pyramid-jinja2
-mccabe==0.6.1             # via flake8
-pastedeploy==2.0.1        # via plaster-pastedeploy
+    # via -r requirements.in
+functools32==3.2.3.post2
+    # via flake8
+hupper==1.8.1
+    # via pyramid
+jinja2==2.11.3
+    # via pyramid-jinja2
+markupsafe==1.1.1
+    # via
+    #   jinja2
+    #   pyramid-jinja2
+mccabe==0.6.1
+    # via flake8
+pastedeploy==2.0.1
+    # via plaster-pastedeploy
 plaster-pastedeploy==0.7
-plaster==1.0              # via plaster-pastedeploy, pyramid
-pycodestyle==2.5.0        # via flake8
-pyflakes==2.1.1           # via flake8
+    # via
+    #   -r requirements.in
+    #   pyramid
+plaster==1.0
+    # via
+    #   plaster-pastedeploy
+    #   pyramid
+pycodestyle==2.5.0
+    # via flake8
+pyflakes==2.1.1
+    # via flake8
 pyramid-jinja2==2.8
+    # via -r requirements.in
 pyramid-retry==2.0
+    # via -r requirements.in
 pyramid-webpack==0.1.3
+    # via -r requirements.in
 pyramid==1.10.4
-six==1.12.0               # via pyramid-webpack
-translationstring==1.3    # via pyramid
-venusian==1.2.0           # via pyramid
+    # via
+    #   -r requirements.in
+    #   pyramid-jinja2
+    #   pyramid-retry
+    #   pyramid-webpack
+repoze.lru==0.7
+    # via pyramid
+six==1.12.0
+    # via pyramid-webpack
+translationstring==1.3
+    # via pyramid
+typing==3.7.4.3
+    # via flake8
+venusian==1.2.0
+    # via pyramid
 waitress==1.4.1
-webob==1.8.5              # via pyramid
-zope.deprecation==4.4.0   # via pyramid, pyramid-jinja2
-zope.interface==4.6.0     # via pyramid, pyramid-retry
+    # via -r requirements.in
+webob==1.8.5
+    # via pyramid
+zope.deprecation==4.4.0
+    # via
+    #   pyramid
+    #   pyramid-jinja2
+zope.interface==4.6.0
+    # via
+    #   pyramid
+    #   pyramid-retry
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
